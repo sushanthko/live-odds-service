@@ -1,7 +1,7 @@
-import com.sushanthko.exercises.liveodds.ScoreBoard
+import com.sushanthko.exercises.liveodds.service.ScoreBoard
 import spock.lang.Specification
 
-class ScoreboardSpecification extends Specification{
+class ScoreboardSpecification extends Specification {
     def "Start a match and add it to the scoreboard"() {
         given: "Given a scoreboard"
         def scoredBoard = new ScoreBoard()
@@ -23,6 +23,7 @@ class ScoreboardSpecification extends Specification{
         scoredBoard.getScore(match)
 
         then: "Match is removed from the scoreboard"
-        thrown Exception
+        def exception = thrown(Exception)
+        exception.message == 'Match finished or is yet to start'
     }
 }
