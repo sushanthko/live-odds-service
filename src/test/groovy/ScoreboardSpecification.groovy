@@ -17,5 +17,12 @@ class ScoreboardSpecification extends Specification{
 
         then: "Get the updated score"
         scoredBoard.getScore(match) == 'Home team 1 - Away team 0'
+
+        when: "Finish the match and try to get its score"
+        scoredBoard.finishMatch(match)
+        scoredBoard.getScore(match)
+
+        then: "Match is removed from the scoreboard"
+        thrown Exception
     }
 }
