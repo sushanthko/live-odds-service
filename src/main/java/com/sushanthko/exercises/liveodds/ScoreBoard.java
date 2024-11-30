@@ -17,4 +17,10 @@ public class ScoreBoard {
         return String.format("%s %s - %s %s", match.getHomeTeam(), score.homeGoals(), match.getAwayTeam(),
                 score.awayGoals());
     }
+
+    public void updateScore(Match match, Integer homeTeamGoals, Integer awayTeamGoals) {
+        Score score = new Score(homeTeamGoals, awayTeamGoals);
+
+        match.setScore(score);
+    }
 }
