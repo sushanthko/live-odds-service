@@ -11,5 +11,11 @@ class ScoreboardSpecification extends Specification{
 
         then: "Get the score"
         scoredBoard.getScore(match) == 'Home team 0 - Away team 0'
+
+        when: "Update the score"
+        scoredBoard.updateScore(match, 1, 0)
+
+        then: "Get the updated score"
+        scoredBoard.getScore(match) == 'Home team 1 - Away team 0'
     }
 }
