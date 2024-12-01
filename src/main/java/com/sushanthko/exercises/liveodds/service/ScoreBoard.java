@@ -12,6 +12,7 @@ public class ScoreBoard {
 
     public Match startMatch(String homeTeam, String awayTeam) {
         Score score = new Score(0, 0);
+
         Match match = new Match(homeTeam, awayTeam, score);
 
         matches.add(match);

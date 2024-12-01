@@ -26,4 +26,34 @@ class ScoreboardSpecification extends Specification {
         def exception = thrown(Exception)
         exception.message == 'Match finished or is yet to start'
     }
+
+    def "Get a summary of the matches in progress"() {
+        given: "Given a scoreboard"
+        def scoredBoard = new ScoreBoard()
+
+        and: "A list of matches"
+        def matches = [['Mexico': 'Canada'], ['Spain': 'Brazil'], ['Germany': 'France'], ['Uruguay': 'Italy'],
+                       ['Argentina': 'Australia']]
+
+        when: "Each match is started"
+        matches.forEach {
+            it.each {
+                homeTeam, awayTeam -> scoredBoard.startMatch(homeTeam, awayTeam)
+            }
+        }
+
+        and: "Scores are updated"
+        def scores = [[0: 5], [10: 2], [2: 2], [6: 6], [3: 1]]
+
+        scoredBoard.matches.eachWithIndex { match, index ->
+            {
+                scores.get(index).each {
+                    homeTeamGoals, awayTeamGoals -> scoredBoard.updateScore(match, homeTeamGoals, awayTeamGoals)
+                }
+            }
+        }
+
+        then: "Get the summary of the matches in progress"
+        scoredBoard.summary != null
+    }
 }
