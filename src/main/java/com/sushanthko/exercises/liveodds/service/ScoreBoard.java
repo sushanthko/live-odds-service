@@ -2,9 +2,9 @@ package com.sushanthko.exercises.liveodds.service;
 
 import com.sushanthko.exercises.liveodds.domain.Match;
 import com.sushanthko.exercises.liveodds.domain.Score;
-import com.sushanthko.exercises.liveodds.util.MatchComparator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -13,6 +13,12 @@ import java.util.stream.IntStream;
 public class ScoreBoard {
     private final List<Match> matches = new ArrayList<>();
 
+    /**
+     * Start a match and return the {@link Match} reference
+     * @param homeTeam name of the home team
+     * @param awayTeam name of the away team
+     * @return a reference to the started match
+     */
     public Match startMatch(String homeTeam, String awayTeam) {
         Score score = new Score(0, 0);
 
@@ -32,7 +38,7 @@ public class ScoreBoard {
                 score.awayTeamGoals());
     }
 
-    public void updateScore(Match match, Integer homeTeamGoals, Integer awayTeamGoals) {
+    public void updateScore(Match match, int homeTeamGoals, int awayTeamGoals) {
         Match foundMatch = findMatch(match);
 
         Score score = new Score(homeTeamGoals, awayTeamGoals);
@@ -59,13 +65,15 @@ public class ScoreBoard {
     }
 
     public String getSummary() {
-        List<Match> reversedMatches = matches.reversed();
+        Comparator<Match> byTotalScore = Comparator.comparingInt(Match::getTotalScore);
 
-        reversedMatches.sort(new MatchComparator());
+        matches.sort(byTotalScore);
+
+        List<Match> sortedReverseOrderedMatches = matches.reversed();
 
         return IntStream
-                .range(0, reversedMatches.size())
-                .mapToObj(i -> String.format("%s. %s", i + 1, getScore(reversedMatches.get(i))))
+                .range(0, sortedReverseOrderedMatches.size())
+                .mapToObj(i -> String.format("%s. %s", i + 1, getScore(sortedReverseOrderedMatches.get(i))))
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 }
