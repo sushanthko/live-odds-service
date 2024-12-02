@@ -2,10 +2,13 @@ package com.sushanthko.exercises.liveodds.service;
 
 import com.sushanthko.exercises.liveodds.domain.Match;
 import com.sushanthko.exercises.liveodds.domain.Score;
+import com.sushanthko.exercises.liveodds.util.MatchComparator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ScoreBoard {
     private final List<Match> matches = new ArrayList<>();
@@ -25,8 +28,8 @@ public class ScoreBoard {
 
         Score score = foundMatch.getScore();
 
-        return String.format("%s %s - %s %s", foundMatch.getHomeTeam(), score.homeGoals(), match.getAwayTeam(),
-                score.awayGoals());
+        return String.format("%s %s - %s %s", foundMatch.getHomeTeam(), score.homeTeamGoals(), match.getAwayTeam(),
+                score.awayTeamGoals());
     }
 
     public void updateScore(Match match, Integer homeTeamGoals, Integer awayTeamGoals) {
@@ -41,6 +44,10 @@ public class ScoreBoard {
         matches.remove(match);
     }
 
+    public List<Match> getMatches() {
+        return matches;
+    }
+
     private Match findMatch(Match match) {
         return matches
                 .stream()
@@ -49,5 +56,16 @@ public class ScoreBoard {
                                 && Objects.equals(matchInList.getAwayTeam(), match.getAwayTeam())))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Match finished or is yet to start"));
+    }
+
+    public String getSummary() {
+        List<Match> reversedMatches = matches.reversed();
+
+        reversedMatches.sort(new MatchComparator());
+
+        return IntStream
+                .range(0, reversedMatches.size())
+                .mapToObj(i -> String.format("%s. %s", i + 1, getScore(reversedMatches.get(i))))
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 }

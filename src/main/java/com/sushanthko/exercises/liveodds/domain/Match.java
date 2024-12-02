@@ -26,4 +26,8 @@ public class Match {
     public void setScore(Score score) {
         this.score = score;
     }
+
+    public int getTotalScore() {
+        return score.homeTeamGoals() + score.awayTeamGoals();
+    }
 }
