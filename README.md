@@ -2,7 +2,7 @@
 This is a simple library implementation of the **Live Football World Cup Score Board**.
 
 ## Usage
-The methods defined in the `com.sushanthko.exercises.liveodds.service.ScoreBoard` class allow to perform various actions on the scoreboard.
+The methods defined in the `com.sushanthko.exercises.liveodds.service.Scoreboard` class allow to perform various actions on the scoreboard.
 ```java
 // Initialize a scoreboard object
 Scoreboard scoreboard = new Scoreboard();

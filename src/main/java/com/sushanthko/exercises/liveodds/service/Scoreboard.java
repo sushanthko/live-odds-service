@@ -12,10 +12,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * The {@link Score} class represents the live scoreboard. It holds information about all the matches in progress and
- * allows to view and update their scores and also provides a summary of matches
+ * The {@link Scoreboard} class represents the live scoreboard. It holds information about all the matches in progress
+ * and allows to view and update their scores and also provides a summary of matches
  */
-public class ScoreBoard {
+public class Scoreboard {
     private final List<Match> matches = new ArrayList<>();
 
     /**
