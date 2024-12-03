@@ -93,7 +93,7 @@ class ScoreboardSpecification extends Specification {
         exception.message == 'The number of goals for a team cannot be negative'
     }
 
-    def "Do not allow team names to be null or empty"() {
+    def "Do not allow team names to be null or blank"() {
         given: "A scoreboard"
         def scoreboard = new ScoreBoard()
 

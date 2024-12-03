@@ -22,16 +22,27 @@ public class ScoreBoard {
      * @return a reference to the started match
      */
     public Match startMatch(String homeTeam, String awayTeam) {
-        Objects.requireNonNull(homeTeam, "homeTeam cannot be null");
-        Objects.requireNonNull(awayTeam, "awayTeam cannot be null");
+        Objects.requireNonNull(homeTeam, "Home team cannot be null");
+        Objects.requireNonNull(awayTeam, "Away team cannot be null");
+
+        if (homeTeam.isBlank()) {
+            throw new RuntimeException("Home team cannot be blank");
+        }
+
+        if (awayTeam.isBlank()) {
+            throw new RuntimeException("Away team cannot be blank");
+        }
+
+        homeTeam = homeTeam.trim();
+        awayTeam = awayTeam.trim();
 
         List<String> teams = collectTeamsInLowerCase();
 
-        if (teams.contains(homeTeam)) {
+        if (teams.contains(homeTeam.toLowerCase())) {
             throw new RuntimeException(String.format("%s is part of a match in progress", homeTeam));
         }
 
-        if (teams.contains(awayTeam)) {
+        if (teams.contains(awayTeam.toLowerCase())) {
             throw new RuntimeException(String.format("%s is part of a match in progress", awayTeam));
         }
 
@@ -54,7 +65,7 @@ public class ScoreBoard {
     }
 
     public void updateScore(Match match, int homeTeamGoals, int awayTeamGoals) {
-        Objects.requireNonNull(match, "match cannot be null");
+        Objects.requireNonNull(match, "Match cannot be null");
 
         if (homeTeamGoals < 0 || awayTeamGoals < 0) {
             throw new RuntimeException("The number of goals for a team cannot be negative");
