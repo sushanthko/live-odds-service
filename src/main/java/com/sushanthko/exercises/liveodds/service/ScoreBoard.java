@@ -15,11 +15,11 @@ public class ScoreBoard {
     private final List<Match> matches = new ArrayList<>();
 
     /**
-     * Start a match and return the {@link Match} reference
+     * Starts a match
      *
      * @param homeTeam name of the home team
      * @param awayTeam name of the away team
-     * @return a reference to the started match
+     * @return a reference to the started {@link Match}
      */
     public Match startMatch(String homeTeam, String awayTeam) {
         Objects.requireNonNull(homeTeam, "Home team cannot be null");
@@ -55,6 +55,12 @@ public class ScoreBoard {
         return match;
     }
 
+    /**
+     * Returns the score of a match as a string
+     *
+     * @param match a {@link Match} in progress
+     * @return the string representation of the match score
+     */
     public String getScore(Match match) {
         Match foundMatch = findMatch(match);
 
@@ -64,6 +70,13 @@ public class ScoreBoard {
                 score.awayTeamGoals());
     }
 
+    /**
+     * Updates the score of an ongoing match
+     *
+     * @param match         reference to a {@link Match}
+     * @param homeTeamGoals number of goals scored by the home team
+     * @param awayTeamGoals number of goals scored by the away team
+     */
     public void updateScore(Match match, int homeTeamGoals, int awayTeamGoals) {
         Objects.requireNonNull(match, "Match cannot be null");
 
@@ -78,24 +91,29 @@ public class ScoreBoard {
         foundMatch.setScore(score);
     }
 
+    /**
+     * Finishes the match on the scoreboard
+     *
+     * @param match a {@link Match} to finish
+     */
     public void finishMatch(Match match) {
         matches.remove(match);
     }
 
+    /**
+     * Get a list of ongoing matches
+     *
+     * @return a {@link List} of matches
+     */
     public List<Match> getMatches() {
         return matches;
     }
 
-    private Match findMatch(Match match) {
-        return matches
-                .stream()
-                .filter(matchInList -> matchInList == match ||
-                        (Objects.equals(matchInList.getHomeTeam(), match.getHomeTeam())
-                                && Objects.equals(matchInList.getAwayTeam(), match.getAwayTeam())))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Match finished or is yet to start"));
-    }
-
+    /**
+     * Get the summary of the matches on the scoreboard
+     *
+     * @return a {@link String} representation of the match summary
+     */
     public String getSummary() {
         Comparator<Match> byTotalScore = Comparator.comparingInt(Match::getTotalScore);
 
@@ -109,8 +127,30 @@ public class ScoreBoard {
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
+    /**
+     * Retrieves a match from the list of ongoing matches
+     *
+     * @param match a {@link Match}
+     * @return a reference to the match, if found
+     */
+    private Match findMatch(Match match) {
+        return matches
+                .stream()
+                .filter(matchInList -> matchInList == match ||
+                        (Objects.equals(matchInList.getHomeTeam(), match.getHomeTeam())
+                                && Objects.equals(matchInList.getAwayTeam(), match.getAwayTeam())))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Match finished or is yet to start"));
+    }
+
+    /**
+     * Returns a list of all the teams that are involved in matches
+     *
+     * @return a {@link List} of lower case strings
+     */
     private List<String> collectTeamsInLowerCase() {
-        return matches.stream()
+        return matches
+                .stream()
                 .flatMap(match -> Stream.of(match.getHomeTeam().toLowerCase(), match.getAwayTeam().toLowerCase()))
                 .collect(Collectors.toList());
     }

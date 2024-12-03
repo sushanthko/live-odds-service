@@ -1,8 +1,12 @@
 package com.sushanthko.exercises.liveodds.domain;
 
+/**
+ * The {@link Match} class represents a match on the scoreboard. It holds information about a match such as home and
+ * away team names and the score
+ */
 public class Match {
-    private String homeTeam;
-    private String awayTeam;
+    private final String homeTeam;
+    private final String awayTeam;
     private Score score;
 
     public Match(String homeTeam, String awayTeam, Score score) {
