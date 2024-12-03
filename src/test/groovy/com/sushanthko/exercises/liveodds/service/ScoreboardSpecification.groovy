@@ -92,4 +92,21 @@ class ScoreboardSpecification extends Specification {
         def exception = thrown(Exception)
         exception.message == 'The number of goals for a team cannot be negative'
     }
+
+    def "Do not allow team names to be null or empty"() {
+        given: "A scoreboard"
+        def scoreboard = new ScoreBoard()
+
+        when: "Start a match"
+        scoreboard.startMatch(homeTeam, awayTeam)
+
+        then: "An exception is thrown"
+        def exception = thrown(Exception)
+        exception.message == message
+
+        where:
+        homeTeam  | awayTeam | message
+        'England' | null     | 'Away team cannot be null'
+        ''        | 'Canada' | 'Home team cannot be blank'
+    }
 }
