@@ -9,17 +9,32 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ScoreBoard {
     private final List<Match> matches = new ArrayList<>();
 
     /**
      * Start a match and return the {@link Match} reference
+     *
      * @param homeTeam name of the home team
      * @param awayTeam name of the away team
      * @return a reference to the started match
      */
     public Match startMatch(String homeTeam, String awayTeam) {
+        Objects.requireNonNull(homeTeam, "homeTeam cannot be null");
+        Objects.requireNonNull(awayTeam, "awayTeam cannot be null");
+
+        List<String> teams = collectTeamsInLowerCase();
+
+        if (teams.contains(homeTeam)) {
+            throw new RuntimeException(String.format("%s is part of a match in progress", homeTeam));
+        }
+
+        if (teams.contains(awayTeam)) {
+            throw new RuntimeException(String.format("%s is part of a match in progress", awayTeam));
+        }
+
         Score score = new Score(0, 0);
 
         Match match = new Match(homeTeam, awayTeam, score);
@@ -39,6 +54,12 @@ public class ScoreBoard {
     }
 
     public void updateScore(Match match, int homeTeamGoals, int awayTeamGoals) {
+        Objects.requireNonNull(match, "match cannot be null");
+
+        if (homeTeamGoals < 0 || awayTeamGoals < 0) {
+            throw new RuntimeException("The number of goals for a team cannot be negative");
+        }
+
         Match foundMatch = findMatch(match);
 
         Score score = new Score(homeTeamGoals, awayTeamGoals);
@@ -75,5 +96,11 @@ public class ScoreBoard {
                 .range(0, sortedReverseOrderedMatches.size())
                 .mapToObj(i -> String.format("%s. %s", i + 1, getScore(sortedReverseOrderedMatches.get(i))))
                 .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private List<String> collectTeamsInLowerCase() {
+        return matches.stream()
+                .flatMap(match -> Stream.of(match.getHomeTeam().toLowerCase(), match.getAwayTeam().toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

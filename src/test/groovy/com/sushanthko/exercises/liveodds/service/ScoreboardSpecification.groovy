@@ -55,7 +55,8 @@ class ScoreboardSpecification extends Specification {
         }
 
         then: "Get the summary of the matches in progress"
-        scoredBoard.summary == '1. Uruguay 6 - Italy 6\n' +
+        scoredBoard.summary ==
+                '1. Uruguay 6 - Italy 6\n' +
                 '2. Spain 10 - Brazil 2\n' +
                 '3. Mexico 0 - Canada 5\n' +
                 '4. Argentina 3 - Australia 1\n' +
@@ -85,7 +86,7 @@ class ScoreboardSpecification extends Specification {
         def match = scoreboard.startMatch('Brazil', 'Mexico')
 
         when: "Update the score with invalid values"
-        scoredBoard.updateScore(match, -5, 2)
+        scoreboard.updateScore(match, -5, 2)
 
         then: "An exception is thrown"
         def exception = thrown(Exception)
