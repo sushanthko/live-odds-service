@@ -22,29 +22,12 @@ public class ScoreBoard {
      * @return a reference to the started {@link Match}
      */
     public Match startMatch(String homeTeam, String awayTeam) {
-        Objects.requireNonNull(homeTeam, "Home team cannot be null");
-        Objects.requireNonNull(awayTeam, "Away team cannot be null");
-
-        if (homeTeam.isBlank()) {
-            throw new RuntimeException("Home team cannot be blank");
-        }
-
-        if (awayTeam.isBlank()) {
-            throw new RuntimeException("Away team cannot be blank");
-        }
+        validateTeams(homeTeam, awayTeam);
 
         homeTeam = homeTeam.trim();
         awayTeam = awayTeam.trim();
 
-        List<String> teams = collectTeamsInLowerCase();
-
-        if (teams.contains(homeTeam.toLowerCase())) {
-            throw new RuntimeException(String.format("%s is part of a match in progress", homeTeam));
-        }
-
-        if (teams.contains(awayTeam.toLowerCase())) {
-            throw new RuntimeException(String.format("%s is part of a match in progress", awayTeam));
-        }
+        checkScoreboardPresence(homeTeam, awayTeam);
 
         Score score = new Score(0, 0);
 
@@ -153,5 +136,42 @@ public class ScoreBoard {
                 .stream()
                 .flatMap(match -> Stream.of(match.getHomeTeam().toLowerCase(), match.getAwayTeam().toLowerCase()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Validates the team names for null or blank values
+     *
+     * @param homeTeam the home team name
+     * @param awayTeam the away team name
+     */
+    private void validateTeams(String homeTeam, String awayTeam) {
+        Objects.requireNonNull(homeTeam, "Home team cannot be null");
+        Objects.requireNonNull(awayTeam, "Away team cannot be null");
+
+        if (homeTeam.isBlank()) {
+            throw new RuntimeException("Home team cannot be blank");
+        }
+
+        if (awayTeam.isBlank()) {
+            throw new RuntimeException("Away team cannot be blank");
+        }
+    }
+
+    /**
+     * Checks if either the home team or the away team is part of any ongoing match on the scoreboard
+     *
+     * @param homeTeam the home team name
+     * @param awayTeam the away team name
+     */
+    private void checkScoreboardPresence(String homeTeam, String awayTeam) {
+        List<String> teams = collectTeamsInLowerCase();
+
+        if (teams.contains(homeTeam.toLowerCase())) {
+            throw new RuntimeException(String.format("%s is part of a match in progress", homeTeam));
+        }
+
+        if (teams.contains(awayTeam.toLowerCase())) {
+            throw new RuntimeException(String.format("%s is part of a match in progress", awayTeam));
+        }
     }
 }
