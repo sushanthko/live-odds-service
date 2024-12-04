@@ -36,21 +36,18 @@ class ScoreboardSpecification extends Specification {
         def matchPairs = [['Mexico': 'Canada'], ['Spain': 'Brazil'], ['Germany': 'France'], ['Uruguay': 'Italy'],
                           ['Argentina': 'Australia']]
 
-        when: "Each match is started"
-        matchPairs.forEach {
-            it.each {
-                homeTeam, awayTeam -> scoreboard.startMatch(homeTeam, awayTeam)
-            }
-        }
-
-        and: "Scores are updated"
+        and: "Scores"
         def scores = [[0: 5], [10: 2], [2: 2], [6: 6], [3: 1]]
 
-        scoreboard.matches.eachWithIndex { match, index ->
-            {
-                scores.get(index).each {
-                    homeTeamGoals, awayTeamGoals -> scoreboard.updateScore(match, homeTeamGoals, awayTeamGoals)
-                }
+        when: "Each match is started and the scores are updated"
+        matchPairs.eachWithIndex { it, index ->
+            it.each {
+                homeTeam, awayTeam ->
+                    def match = scoreboard.startMatch(homeTeam, awayTeam)
+
+                    scores.get(index).each {
+                        homeTeamGoals, awayTeamGoals -> scoreboard.updateScore(match, homeTeamGoals, awayTeamGoals)
+                    }
             }
         }
 

@@ -65,8 +65,6 @@ public class Scoreboard {
      * @param awayTeamGoals number of goals scored by the away team
      */
     public void updateScore(Match match, int homeTeamGoals, int awayTeamGoals) {
-        Objects.requireNonNull(match, "Match cannot be null");
-
         if (homeTeamGoals < 0 || awayTeamGoals < 0) {
             throw new RuntimeException("The number of goals for a team cannot be negative");
         }
@@ -85,15 +83,6 @@ public class Scoreboard {
      */
     public void finishMatch(Match match) {
         matches.remove(match);
-    }
-
-    /**
-     * Get a list of ongoing matches
-     *
-     * @return a {@link List} of matches
-     */
-    public List<Match> getMatches() {
-        return matches;
     }
 
     /**
@@ -121,6 +110,8 @@ public class Scoreboard {
      * @return a reference to the match, if found
      */
     private Match findMatch(Match match) {
+        Objects.requireNonNull(match, "Match cannot be null");
+
         return matches
                 .stream()
                 .filter(matchInList -> matchInList == match ||
