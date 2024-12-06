@@ -37,6 +37,8 @@ scoreboard.getScore(match);
     ```
 
 2. Run tests in the project directory
+   
+   **Requirements**: Java 21
 
     ```shell
     cd live-odds-service
